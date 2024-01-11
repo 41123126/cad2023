@@ -44,7 +44,13 @@ brython({debug:1, pythonpath:['/static/','./../downloads/py/']});
 <p><button id="add1to100">1 add to 100</button></p>
 <p>將 iterable 與 iterator <a href="https://home.gamer.com.tw/creationDetail.php?sn=4337438">相關說明</a>, 利用 Brython 與 Ace Editor 整理在這個頁面.</p>
 <h1>作業軟體</h1>
-<h2>Onshape</h2><h2>Soildwork</h2>
+<h2>Onshape</h2>
+<p>簡介:</p>
+<p><b><span>Onshape</span></b><span><span>是一種電腦輔助設計</span></span><span><span>(CAD)軟體系統，透過軟體即服務</span></span><span><span>(SAAS) 模型透過網際網路提供</span><span>。</span><span>它廣泛利用雲端運算，在基於互聯網的伺服器上執行計算密集型處理和渲染，用戶可以透過網頁瀏覽器或iOS和Android應用程式與系統進行互動。</span></span></p>
+<p><span><span>下載教學影片:</span></span></p>
+<p><span><span></span></span></p>
+<p><video autoplay="autoplay" controls="controls" height="150" name="media" width="300"><source src="https://s1511.cycu.org:8138/downloads/onshape%E6%95%99%E5%AD%B8%E5%BD%B1%E7%89%87.mp4" type="video/mp4"/></video></p>
+<h2>Soildwork</h2>
 <p>簡介:</p>
 <pre class="tw-data-text tw-text-large tw-ta" data-placeholder="翻譯" data-ved="2ahUKEwij1Kv2xsaDAxX8h1YBHX4hCa4Q3ewLegQIBRAQ" dir="ltr"><span class="Y2IQFc" lang="zh-TW">SolidWorks是一款由Dassault Systèmes開發的三維電腦輔助設計（CAD）軟體。它專門用於建模、設計和製造<br/>各種機械和工程產品。SolidWorks提供了一個具有繪圖和功能強大的介面，讓使用者能夠建立複雜的三維模型並<br/>進行工程分析、渲染和動畫展示。
 
@@ -86,7 +92,8 @@ SolidWorks它廣泛應用於各個行業，如機械工程、汽車製造、航�
 <pre class="tw-data-text tw-text-large tw-ta" data-placeholder="翻譯" data-ved="2ahUKEwij1Kv2xsaDAxX8h1YBHX4hCa4Q3ewLegQIBRAQ" dir="ltr" id="tw-target-text"><span class="Y2IQFc" lang="zh-TW">
 
 無論是初學者還是經驗豐富的專業人士，SolidWorks都是一個功能強大且靈活的工具，可以幫助使用者實現他們的設計和製造目標。<br/></span></pre>
-<p></p><h2>NX</h2>
+<p></p>
+<h2>NX</h2>
 <p>簡介:</p>
 <div class="flex-1 overflow-hidden">
 <div class="react-scroll-to-bottom--css-lsexp-79elbk h-full">
@@ -115,7 +122,8 @@ SolidWorks它廣泛應用於各個行業，如機械工程、汽車製造、航�
 </div>
 </div>
 </div>
-<p><video autoplay="autoplay" controls="controls" height="150" name="media" width="300"><source src="https://s1511.cycu.org:8138/downloads/NX%E4%B8%8B%E8%BC%89%E5%BD%B1%E7%89%87%E6%95%99%E5%AD%B8.mp4" type="video/mp4"/></video></p><h1>小組檔案</h1>
+<p><video autoplay="autoplay" controls="controls" height="150" name="media" width="300"><source src="https://s1511.cycu.org:8138/downloads/NX%E4%B8%8B%E8%BC%89%E5%BD%B1%E7%89%87%E6%95%99%E5%AD%B8.mp4" type="video/mp4"/></video></p>
+<h1>小組檔案</h1>
 <h2>圖片</h2>
 <p>01</p>
 <p><img alt="" height="429" src="/images/01.png" width="800"/></p>
@@ -198,34 +206,100 @@ SolidWorks它廣泛應用於各個行業，如機械工程、汽車製造、航�
 </li>
 </ol>
 <p>在每一步中，合理的實驗設計和數據分析是關鍵，以確保獲得可靠的結果並有效地進行 PID 控制的調整。</p>
+<h1>座位表</h1>
+<h2>程式</h2>
+<pre class="brush:py;auto-links:false;toolbar:false" contenteditable="false"># Brython code starts
+from browser import document, html
+ 
+# get output html location
+brython_div = document["brython_div1"]
+brython_div &lt;= html.P(id="output_table")
+ 
+# Replace this line with the actual file content
+file_content = open("https://mde.tw/cadnote/downloads/2a_w12_seat.txt").read()
+ 
+# Create a dictionary to store student numbers and seat numbers
+seat_map = {}
+ 
+# Process each line of the file content
+for line in file_content.splitlines():
+    # Split each line using tabs
+    elements = line.split("\t")
+ 
+    # If the line contains seat information
+    if len(elements) == 2 and "(" in elements[1]:
+        # Extract student number and seat information
+        stud_num = elements[0].strip()
+        seat_info = elements[1].strip()
+ 
+        # Add student number and seat information to the dictionary
+        seat_map[stud_num] = seat_info
+ 
+# Find the maximum row and column values
+max_row = max(int(seat_info[1]) for seat_info in seat_map.values())
+max_col = max(int(seat_info[3]) for seat_info in seat_map.values())
+ 
+# Initialize a 2D list to represent the seating arrangement
+seating_arrangement = [["缺席👎"] * max_col for _ in range(max_row)]
+ 
+# Populate the seating arrangement with student information
+for stud_num, seat_info in seat_map.items():
+    row = int(seat_info[1]) - 1
+    col = int(seat_info[3]) - 1
+    seating_arrangement[row][col] = f"座號: {seat_info}, 學號: {stud_num}"
+ 
+# Display the result in the HTML document
+result_html = "&lt;table&gt;"
+for row in seating_arrangement:
+    result_html += "&lt;tr&gt;"
+    for cell_content in row:
+        result_html += f"&lt;td&gt;{cell_content}&lt;/td&gt;"
+    result_html += "&lt;/tr&gt;"
+result_html += "&lt;/table&gt;"
+ 
+# Update the HTML content with the result
+document["output_table"].html = result_html
+# Brython code ends</pre>
+<p>
 <script src="/static/brython.js"></script>
 <script src="/static/brython_stdlib.js"></script>
+</p>
 <!-- 啟動 Brython -->
+<h2>顯示結果</h2>
 <p></p>
+<p>
 <script>
 window.onload=function(){
 brython({debug:1, pythonpath:['/static/','./../downloads/py/']});
 }
 </script>
+</p>
 <!-- 導入 FileSaver 與 filereader -->
 <p></p>
+<p>
 <script src="/static/ace/FileSaver.min.js" type="text/javascript"></script>
 <script src="/static/ace/filereader.js" type="text/javascript"></script>
+</p>
 <!-- 導入 ace -->
 <p></p>
+<p>
 <script src="/static/ace/ace.js" type="text/javascript"></script>
 <script src="/static/ace/ext-language_tools.js" type="text/javascript"></script>
 <script src="/static/ace/mode-python3.js" type="text/javascript"></script>
 <script src="/static/ace/snippets/python.js" type="text/javascript"></script>
+</p>
 <p></p>
 <!-- 導入 gearUtils-0.9.js Cango 齒輪繪圖程式庫 -->
+<p>
 <script src="/static/Cango-24v03-min.js"></script>
 <script src="/static/gearUtils-09.js"></script>
 <script src="/static/SVGpathUtils-6v03-min.js"></script>
 <script src="/static/sylvester.js"></script>
 <script src="/static/PrairieDraw.js"></script>
+</p>
 <!-- 請注意, 這裡使用 Javascript 將 localStorage["kw_py_src1"] 中存在近端瀏覽器的程式碼, 由使用者決定存檔名稱-->
 <p></p>
+<p>
 <script type="text/javascript">
 function doSave(storage_id, filename){
     var blob = new Blob([localStorage[storage_id]], {type: "text/plain;charset=utf-8"});
@@ -233,7 +307,9 @@ function doSave(storage_id, filename){
     saveAs(blob, filename+".py");
 }
 </script>
+</p>
 <p></p>
+<p>
 <script type="text/python3">
 from browser import document as doc
 import ace
@@ -269,8 +345,10 @@ doc['clear_bd1'].bind('click', clear_bd1)
 # 呼叫函式執行
 run1()
 </script>
+</p>
 <p></p>
 <!-- add 1 to 100 開始 -->
+<p>
 <script type="text/python3">
 from browser import document as doc
 import ace
@@ -296,6 +374,7 @@ def add(ev):
 # id 為 "add1to100" 的按鈕點按時, 執行 add 方法
 doc["add1to100"].bind('click', add)
 </script>
+</p>
 <p><!-- add 1 to 100 結束--></p>
 <!-- editor1 開始 -->
 <p><!-- 用來顯示程式碼的 editor 區域 --></p>
